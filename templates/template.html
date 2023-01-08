@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+  <style>
+    .btn-success:hover {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+    .btn-danger:hover {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+  </style>
+      <div class="container">
+    <head>
+      <title>Lamp Control</title>
+        <div class="msg">{{ msg }}</div>
+    </head>
+    <body>
+      <h1 class="text-center" style="font-size: 2.5em; font-weight: bold;">Lamp Control</h1>
+
+      <div class="d-flex justify-content-center mt-5">
+        <button class="btn btn-success" onclick="sendRequest('{{ url_for('tigger_turn_on_relay') }}')">ON</button>
+        <button class="btn btn-danger" onclick="sendRequest('{{ url_for('trigger_turn_off_relay') }}')">OFF</button>
+      </div>
+      <script>
+          function sendRequest(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.send();
+          }
+      </script>
+    </body>
+  </div>
+{% endblock %}
