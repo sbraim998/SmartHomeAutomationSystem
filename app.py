@@ -1,12 +1,7 @@
-from flask import Flask, render_template, redirect
-from User.User_Model import db, db_get_user_by_username
-from authentication import has_session
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '\x8afmI\xc5\x17Rh\x11\xd96Z\xa0\xf1\xfdm\xc0\xfc/\xce\xb4\x9d\xed/'
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+from flask import render_template, redirect, request
+import Devices
+import rgbLight_routes
+from model import app, db
 
 
 @app.route('/')
@@ -49,24 +44,59 @@ def view_authenticate_logout():
     return controller_logout()
 
 
-@app.route('/control_light')
-def view_control_light():
-    return render_template('template.html')
+# Route for displaying devices
+@app.route('/devices')
+def show_devices():
+    from Devices.Devices_Controller import get_paired_devices
+    from Devices.Devices_Model import Device
+    paired_devices = get_paired_devices()
+    print(paired_devices)
+    if paired_devices:
+        return render_template('devices.html', devices=paired_devices)
+    else:
+        return render_template('devices.html', devices=Devices.Devices_Model.Device('No Devices available', '0', '0'))
 
 
-@app.route('/turn_on')
-def tigger_turn_on_relay():
-    from lights import turn_on_relay
-    turn_on_relay()
-    return render_template('template.html', msg="light is on")
+@app.route('/hardware/<device_name>')
+def hardware_controller(device_name):
+    print(device_name)
+    if device_name == 'RGBLight':
+        return render_template('control_rgb.html', device_name=device_name, message=None)
 
 
-@app.route('/turn_off')
-def trigger_turn_off_relay():
-    from lights import turn_off_relay
-    msg = turn_off_relay()
-    return render_template('template.html', msg=msg)
+@app.route('/control/<device_name>/turn_on')
+def turn_on(device_name):
+    if request.method == 'GET':
+        if device_name == 'RGBLight':
+            response = rgbLight_routes.turn_on_light()
+            if response:
+                message = 'Turned ON Successfully'
+            else:
+                message = 'Error occurred'
+            return render_template('control_rgb.html', device_name=device_name, message=message)
 
 
-with app.app_context():
-    db.create_all()
+@app.route('/control/<device_name>/turn_off')
+def turn_off_light(device_name):
+    if request.method == 'GET':
+        if device_name == 'RGBLight':
+            response = rgbLight_routes.turn_off_light()
+            if response:
+                message = 'Turned OFF Successfully'
+            else:
+                message = 'Error occurred'
+            return render_template('control_rgb.html', device_name=device_name, message=message)
+
+
+# @app.route('/pair_new_device')
+# def show_devices():
+#     from Devices.Devices_Controller import get_paired_devices
+#     around_devices = Devices.Devices_Controller.discover_devices()
+#     print(around_devices)
+#     return render_template('pair_device.html', around_devices=around_devices)
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)

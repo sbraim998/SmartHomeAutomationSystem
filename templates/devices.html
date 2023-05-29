@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <div class="container">
+        <h1>Devices</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>WiFi Name</th>
+                    <th>WiFi Password</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td>{{ device.device_name }}</td>
+                    <td>{{ device.wifi_name }}</td>
+                    <td>{{ device.wifi_password }}</td>
+                    <td><a href="/hardware/{{ device.device_name }}">Control</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-primary" href="/add">Add Device</a>
+    </div>
+</body>
+{% endblock %}

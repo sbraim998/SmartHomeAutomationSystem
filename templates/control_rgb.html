@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <div class="container">
+        <h1>Control Device</h1>
+        <h2>Device: {{ device_name }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Turn On Light</td>
+                    <td><a class="btn btn-success" href="/control/{{ device_name }}/turn_on">Turn On</a></td>
+                </tr>
+                <tr>
+                    <td>Turn Off Light</td>
+                    <td><a class="btn btn-danger" href="/control/{{ device_name }}/turn_off">Turn Off</a></td>
+                </tr>
+                <tr>
+                    <td>Change Color</td>
+                    <td><a class="btn btn-primary" href="/control/{{ device_name }}/change_color">Change Color</a></td>
+                </tr>
+                <tr>
+                    <td>Change Color (Blue)</td>
+                    <td><a class="btn btn-primary" href="/control/{{ device_name }}/change_color_blue">Change to Blue</a></td>
+                </tr>
+                <tr>
+                    <td>Change Color (Red)</td>
+                    <td><a class="btn btn-primary" href="/control/{{ device_name }}/change_color_red">Change to Red</a></td>
+                </tr>
+                <tr>
+                    <td>Change Color (Pink)</td>
+                    <td><a class="btn btn-primary" href="/control/{{ device_name }}/change_color_pink">Change to Pink</a></td>
+                </tr>
+                <tr>
+                    <td>Change Color (Purple)</td>
+                    <td><a class="btn btn-primary" href="/control/{{ device_name }}/change_color_purple">Change to Purple</a></td>
+                </tr>
+            </tbody>
+        </table>
+        {% if message %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+        <a class="btn btn-default" href="/devices">Back to Devices</a>
+
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Devices</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Devices</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Device ID</th>
+                    <th>WiFi Name</th>
+                    <th>WiFi Password</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td>{{ device.device_id }}</td>
+                    <td>{{ device.wifi_name }}</td>
+                    <td>{{ device.wifi_password }}</td>
+                    <td>
+                        <form method="POST" action="/connect/{{ device.id }}">
+                            <button type="submit" class="btn btn-primary">Connect</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

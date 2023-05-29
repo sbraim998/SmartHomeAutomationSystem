@@ -13,10 +13,13 @@ def controller_add_user():
             else:
                 username = request.form.get('username')
                 password = request.form.get('password')
-                face = request.form.get('face')
-                plate_number = request.form.get('plate_number')
+                face_path = request.files['face']
+                if face_path.filename == '':
+                    msg = 'No face file selected'
+                    return render_template('add_user.html', msg=msg), 400
+
                 from User.User_Model import db_add_user
-                db_add_user(username, password, face, plate_number)
+                db_add_user(username, password, face_path)
                 msg = 'Account added successfully'
         return render_template('add_user.html', msg=msg)
     else:
@@ -31,9 +34,8 @@ def controller_edit_user():
             username = request.form.get('username')
             password = request.form.get('password')
             face = request.form.get('face')
-            plate_number = request.form.get('plate_number')
             from User.User_Model import db_edit_user
-            db_edit_user(user_id, username, password, face, plate_number)
+            db_edit_user(user_id, username, password, face)
             msg = 'User information edited successfully'
         return render_template('edit_user.html', msg=msg)
     else:
@@ -56,3 +58,5 @@ def controller_delete_user():
         return render_template('delete_user.html', msg=msg)
     else:
         return 'Please sign in first go to "172.0.0.1:5000/login"'
+
+
