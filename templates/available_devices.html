@@ -17,15 +17,26 @@
                 <tr>
                     <td>{{ device.device_name }}</td>
                     <td>{{ device.IP }}</td>
-                    <td><a href="/hardware/{{ device.device_name }}">Control</a></td>
+                    <td>
+                        <form action="/add_device_to_room/{{ room.id }}" method="post">
+                            <input type="hidden" name="device_name" value="{{ device.device_name }}">
+                            <input type="hidden" name="device_IP" value="{{ device.IP }}">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <a class="btn btn-primary" href="/add">Add Device</a>
         {% else %}
         <p>{{ msg }}</p>
         {% endif %}
+
+        {% if msg %}
+        <p class="msg">{{ msg }}</p>
+        {% endif %}
+
+        <a class="btn btn-secondary" href="/rooms">Back</a>
     </div>
 </body>
 {% endblock %}

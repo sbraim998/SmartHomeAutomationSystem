@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <div class="container">
+        <h1>Control Device</h1>
+        <h2>Device: {{ device_name }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Route</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Unlock Door</td>
+                    <td><a class="btn btn-success" href="/control/{{ device_name }}/turn_on">Unlock Door</a></td>
+                </tr>
+                <tr>
+                    <td>Lock Door</td>
+                    <td><a class="btn btn-danger" href="/control/{{ device_name }}/turn_off">Lock Door</a></td>
+                </tr>
+            </tbody>
+        </table>
+        {% if message %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+        <a class="btn btn-default" href="/devices">Back to Devices</a>
+
+    </div>
+</body>
+{% endblock %}

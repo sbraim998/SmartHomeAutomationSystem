@@ -2,8 +2,8 @@
 {% block content %}
   <div class="container">
     <h1>Add User</h1>
-    <form action="/add_user" method="post">
-        <div class="msg">{{ msg }}</div>
+    <form id="addUserForm" action="/add_user" method="post" enctype="multipart/form-data">
+      <div class="msg">{{ msg }}</div>
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username">
@@ -13,8 +13,8 @@
         <input type="text" class="form-control" id="password" name="password">
       </div>
       <div class="form-group">
-        <label for="face">Face:</label>
-        <input type="file" class="form-control" id="face" name="face">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control" id="image" name="image">
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>

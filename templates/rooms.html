@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1>Rooms</h1>
+    {% if rooms %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Room Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for room in rooms %}
+        <tr>
+          <td>{{ room.room_name }}</td>
+          <td><a href="/show_room_devices/{{ room.id }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No available rooms.</p>
+    {% endif %}
+  </div>
+{% endblock %}

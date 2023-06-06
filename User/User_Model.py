@@ -1,5 +1,4 @@
-from model import User
-import base64
+from model import User, db
 import base64
 from PIL import Image
 from io import BytesIO
@@ -19,11 +18,10 @@ def get_user_face_image(user_id):
         return None
 
 
-def db_add_user(username, password, face_file_path):
-    face = base64.b64encode(face_file_path.read())
+def db_add_user(username, password, face):
     new_user = User(username=username, password=password, face=face)
-    new_user.session.add(new_user)
-    new_user.session.commit()
+    db.session.add(new_user)
+    db.session.commit()
 
 
 def db_delete_user(user_id):

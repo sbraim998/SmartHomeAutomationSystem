@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <title>Voice Command Listener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #volume-meter {
+            width: 200px;
+            height: 20px;
+            border: 1px solid #333;
+            background-color: #eee;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        #volume-bar {
+            height: 100%;
+            background-color: #007bff;
+            width: 0%;
+            transition: width 0.2s ease-in-out;
+        }
+
+        #start-listening-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #start-listening-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voice Command Listener</h1>
+
+    {% if msg %}
+          <div class="alert alert-info">{{ msg }}</div>
+    {% endif %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form id="voice-command-form" action="/listen" method="post">
+    <div id="volume-meter">
+        <div id="volume-bar"></div>
+    </div>
+
+    <button id="start-listening-btn" onclick="startRecording()">Start Listening</button>
+
+
+    <input type="hidden" id="command-input" name="command" value="">
+</form>
+    <script>
+        var volumeMeter = document.getElementById('volume-meter');
+        var volumeBar = document.getElementById('volume-bar');
+        var startButton = document.getElementById('start-listening-btn');
+
+        function startListening() {
+            startButton.disabled = true;
+            startButton.textContent = 'Listening...';
+
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = function(event) {
+                var result = event.results[event.results.length - 1];
+                var transcript = result[0].transcript;
+
+                document.getElementById('command-input').value = transcript;
+                document.getElementById('voice-command-form').submit();
+
+                console.log('Transcript:', transcript);
+            };
+
+            recognition.onvolumechange = function(event) {
+                var volume = event.volume;
+                var meterWidth = volume * 100;
+                volumeBar.style.width = meterWidth + '%';
+            };
+
+            recognition.onend = function() {
+                startButton.disabled = false;
+                startButton.textContent = 'Start Listening';
+            };
+
+            recognition.start();
+        }
+function startRecording() {
+    startButton.disabled = true;
+    startButton.textContent = 'Recording...';
+
+    setTimeout(function() {
+        startButton.disabled = false;
+        startButton.textContent = 'Start Listening';
+    }, 5000);  // Enable the button after 5 seconds
+
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = function(event) {
+        var result = event.results[event.results.length - 1];
+        var transcript = result[0].transcript;
+
+        document.getElementById('command-input').value = transcript;
+        document.getElementById('voice-command-form').submit();
+
+        console.log('Transcript:', transcript);
+    };
+
+    recognition.onvolumechange = function(event) {
+        var volume = event.volume;
+        var meterWidth = volume * 100;
+        volumeBar.style.width = meterWidth + '%';
+    };
+
+    recognition.start();
+}
+
+    </script>
+</body>
+{% endblock %}
